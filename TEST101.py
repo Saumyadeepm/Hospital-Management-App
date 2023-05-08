@@ -93,7 +93,16 @@ def main():
     # Retrieve patient records from MongoDB and convert Cursor to DataFrame
     patient_cursor = patients_collection.find({"user_id": user["_id"]}).limit(row_number)
     patient_data = list(patient_cursor)
-    patient_df = pd.DataFrame(patient_data, encoding='utf-8')
+    # Decode string values in patient_data
+    decoded_patient_data = []
+    for data in patient_data:
+        decoded_data = {
+            key: value.decode('utf-8') if isinstance(value, bytes) else value
+            for key, value in data.items()
+        }
+        decoded_patient_data.append(decoded_data)
+
+    patient_df = pd.DataFrame(decoded_patient_data)
 
     # Draw grid table using the converted DataFrame
     data = draw_grid(
@@ -105,12 +114,12 @@ def main():
         max_height=300
     )
 
-    # Display Patient Records
-    st.subheader("Patient Records")
-    if data:
-        st.table(data)
-    else:
-        st.info("No patient records found.")
+# Display Patient Records
+st.subheader("Patient Records")
+if data:
+    st.table(data)
+else:
+    st.info("No patient records found.")
     
     # Doctor's Schedule
     if user["is_admin"]:
