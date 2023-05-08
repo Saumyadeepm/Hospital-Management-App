@@ -148,7 +148,7 @@ def main():
             col2.info("No appointment records found.")
         
         
-    st.sidebar.divider()
+    st.divider()
     # Doctor's Schedule
     if user["is_admin"]:
         st.sidebar.subheader("Doctor's Schedule")
@@ -373,10 +373,66 @@ def main():
                 if user_record["Action"]:
                     user_id = user_record.name
                     users_collection.delete_one({"_id": user_id})
-                    st.success("User removed successfully!")            
-        
-    
-    
+                    st.success("User removed successfully!")              
+        st.divider()
+        if Remove_users:
+                st.subheader("Remove Users")
+                all_users = users_collection.find({})
+                user_records = []
+                for user in all_users:
+                    user_id = user["_id"]
+                    username = user["username"]
+                    email = user["email"]
+                    is_admin = user["is_admin"]
+                    remove_button = st.button(f"Remove##{user_id}")
+                    user_records.append({
+                        "User ID": user_id,
+                        "Username": username,
+                        "Email": email,
+                        "Is Admin": is_admin,
+                        "Remove": remove_button
+                    })
+
+                if len(user_records) > 0:
+                    df = pd.DataFrame(user_records)
+                    df.set_index("User ID", inplace=True)
+                    st.dataframe(df)
+                else:
+                    st.info("No user records found.")
+
+                # Delete user when the "Remove" button is clicked
+                to_remove = []
+                for index, row in df.iterrows():
+                    if row["Remove"]:
+                        to_remove.append(index)
+
+                if len(to_remove) > 0:
+                    users_collection.delete_many({"_id": {"$in": to_remove}})
+                    st.success("Users removed successfully!")
+
+                # Refresh the user records after deletion
+                all_users = users_collection.find({})
+                updated_user_records = []
+                for user in all_users:
+                    user_id = user["_id"]
+                    username = user["username"]
+                    email = user["email"]
+                    is_admin = user["is_admin"]
+                    remove_button = st.button(f"Remove##{user_id}")
+                    updated_user_records.append({
+                        "User ID": user_id,
+                        "Username": username,
+                        "Email": email,
+                        "Is Admin": is_admin,
+                        "Remove": remove_button
+                    })
+
+                if len(updated_user_records) > 0:
+                    updated_df = pd.DataFrame(updated_user_records)
+                    updated_df.set_index("User ID", inplace=True)
+                    st.dataframe(updated_df)
+                else:
+                    st.info("No user records found.")    
 # User login
 def login():
     st.subheader("Login")
