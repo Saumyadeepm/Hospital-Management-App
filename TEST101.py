@@ -260,34 +260,32 @@ def main():
     # Divide the screen into two columns
     col1, col2 = st.beta_columns(2)
     with col1:
-        # Generate and display Appointment Report
-        if report_type == "Appointment":
-            st.subheader("Appointment Report")
-            report_data = []
-            appointment_cursor = appointments_collection.find({})
-            for appointment in appointment_cursor:
-                report_data.append(appointment)
-            if len(report_data) > 0:
-                col1.table(report_data)
-            else:
-                col1.info("No appointment records found.")
-            reports_collection.insert_one({"report_type": "Appointment", "data": report_data})
-            st.success("Appointment report generated!")
+        #Display Appointment Report
+        st.subheader("Appointment Report")
+        report_data = []
+        appointment_cursor = appointments_collection.find({}).limit(row_number)
+        for appointment in appointment_cursor:
+            report_data.append(appointment)
+        if len(report_data) > 0:
+            col1.table(report_data)
+        else:
+            col1.info("No appointment records found.")
+        reports_collection.insert_one({"report_type": "Appointment", "data": report_data})
+        st.success("Appointment report generated!")
 
     with col2:
-    # Generate and display Patient Report
-        if report_type == "Patient":
-            st.subheader("Patient Report")
-            report_data = []
-            patient_cursor = patients_collection.find({})
-            for patient in patient_cursor:
-                report_data.append(patient)
-            if len(report_data) > 0:
-                col2.table(report_data)
-            else:
-                col2.info("No patient records found.")
-            reports_collection.insert_one({"report_type": "Patient", "data": report_data})
-            st.success("Patient report generated!")
+    # Display Patient Report
+        st.subheader("Patient Report")
+        report_data = []
+        patient_cursor = patients_collection.find({}).limit(row_number)
+        for patient in patient_cursor:
+            report_data.append(patient)
+        if len(report_data) > 0:
+            col2.table(report_data)
+        else:
+            col2.info("No patient records found.")
+        reports_collection.insert_one({"report_type": "Patient", "data": report_data})
+        st.success("Patient report generated!")
     
     # User Management
     if user["is_admin"]:
