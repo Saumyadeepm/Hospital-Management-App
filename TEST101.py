@@ -37,19 +37,11 @@ def main():
 
     user = st.session_state["user"]
     # Logout button
-    st.sidebar.markdown(
-        """
-        <div style='position: fixed; top: 10px; right: 10px;'>
-        <form method='POST'>
-        <input type='submit' value='Logout' name='logout_button'/>
-        </form>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    logout_button = st.sidebar.empty()
+    logout_button.button("Logout")
 
     # Handle logout
-    if st.session_state.pop("logout_button", False):
+    if logout_button.clicked:
         st.session_state.pop("user")
         st.success("Logout successful!")
         st.stop()
