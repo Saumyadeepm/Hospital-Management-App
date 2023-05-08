@@ -356,7 +356,7 @@ def main():
             for user in all_users:
                 user_records.append({
                     "User ID": user["_id"],
-                    "Name": user["username"],
+                    "Username": user["username"],
                     "Email": user["email"],
                     "Is Admin": user["is_admin"],
                     "Action": st.button(f"Remove##{user['_id']}")
