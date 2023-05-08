@@ -54,6 +54,22 @@ def main():
             st.sidebar.success("Appointment booked successfully!")
         else:
             st.sidebar.error("Please fill in all the appointment details!")
+    # Display Patient Records
+    st.subheader("Patient Records")
+    patient_cursor = patients_collection.find({"user_id": user["_id"]})
+    patient_records = []
+    for patient in patient_cursor:
+        patient_records.append({
+            "Patient Name": patient["name"],
+            "Age": patient["age"],
+            "Gender": patient["gender"],
+            "Medical History": patient["medical_history"]
+        })
+
+    if len(patient_records) > 0:
+        st.table(patient_records)
+    else:
+        st.info("No patient records found.")
 
     # Patient Records
     st.sidebar.subheader("Patient Records")
@@ -62,6 +78,7 @@ def main():
     patient_gender = st.sidebar.selectbox("Patient Gender", ["Male", "Female", "Other"])
     patient_history = st.sidebar.text_area("Medical History")
     add_patient = st.sidebar.button("Add Patient")
+    
 
     if add_patient:
         if patient_name and patient_age and patient_gender:
@@ -76,7 +93,7 @@ def main():
             st.sidebar.success("Patient added successfully!")
         else:
             st.sidebar.error("Please fill in all the patient details!")
-
+    
     # Doctor's Schedule
     if user["is_admin"]:
         st.sidebar.subheader("Doctor's Schedule")
