@@ -163,6 +163,47 @@ def main():
             st.write(f"Amount: {invoice['amount']}")
             st.write(f"Status: {invoice['status']}")
             st.write("-------------------------")
+    
+   
+    
+    # Retrieve patient records from MongoDB and convert Cursor to DataFrame
+    doctor_cursor = doctors_collection.find({"user_id": user["_id"]}).limit(row_number)
+   
+    # Retrieve appointments data from MongoDB and convert Cursor to DataFrame
+    invoice_cursor = invoices_collection.find({"user_id": user["_id"]}).limit(row_number)
+    
+    # Divide the screen into two columns
+    col1, col2 = st.beta_columns(2)
+    
+    with col1:
+        # Display Patient Records
+        st.subheader("Doctors Schedule")
+        doctor_schedules = []
+        for doctor in doctor_cursor:
+            doctor_schedules.append({
+                "Doctor Name": doctor["name"],
+                "Schedule": doctor["schedule"]
+        })
+        if len(doctor_schedules) > 0:
+            col1.table(doctor_schedules)
+        else:
+            col1.info("No doctor schedules found.")
+            
+    with col2:
+        # Display Invoices
+        st.subheader("Invoices")
+        invoice_records = []
+        for invoice in invoice_cursor:
+            invoice_records.append({
+                "Invoice ID": invoice["_id"],
+                "Amount": invoice["amount"],
+                "Status": invoice["status"]
+            })
+        if len(invoice_records) > 0:
+            col2.table(invoice_records)
+        else:
+            col2.info("No invoices found.")   
+            
     if make_payment:
         st.subheader("Make Payment")
         invoice_id = st.text_input("Invoice ID")
