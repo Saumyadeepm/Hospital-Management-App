@@ -37,20 +37,15 @@ def main():
 
     user = st.session_state["user"]
     
-    logout_button_style = """
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    """
-    
-    # Logout button
-    st.sidebar.markdown(f'<button style="{logout_button_style}" onclick="location.reload();">Logout</button>', unsafe_allow_html=True)
+    # Divide the screen into two columns
+    col1, col2 = st.beta_columns([1, 4])
 
-    # Handle logout
-    if st.sidebar.button("Logout"):
+    # Logout button in top right corner
+    if col2.button("Logout", key="logout_button"):
         st.session_state.pop("user")
-        st.sidebar.success("Logout successful!")
+        st.success("Logout successful!")
         st.stop()
+    
 
     # Appointment Booking
     st.sidebar.subheader("Appointment Booking")
