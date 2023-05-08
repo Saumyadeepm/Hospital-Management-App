@@ -1,8 +1,10 @@
 import streamlit as st
-from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
+
+uri = "mongodb+srv://saumya:helloworld@mycluster101.keorneq.mongodb.net/?retryWrites=true&w=majority"
 
 # Connect to MongoDB
-client = MongoClient("mongodb+srv://saumya:helloworld@mycluster101.keorneq.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient(uri)
 
 db = client["hospital_management"]
 appointments_collection = db["appointments"]
