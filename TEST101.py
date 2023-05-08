@@ -36,26 +36,26 @@ def main():
         st.stop()
 
     user = st.session_state["user"]
-    
-     # Add CSS styling to position the logout button in the top right corner
-    st.markdown(
-        """
+    logout_button = """
         <style>
         .logout-button {
-            position: absolute;
+            position: fixed;
             top: 10px;
             right: 10px;
+            z-index: 999;
         }
         </style>
-        """,
-        unsafe_allow_html=True
-    )
+        <button class="logout-button" onclick="logout()">Logout</button>
+        <script>
+        function logout() {
+            fetch('/_logout', { method: 'POST' });
+            location.reload();
+        }
+        </script>
+    """
 
-    # Logout button
-    if st.button("Logout", key="logout", class_="logout-button"):
-        # Clear user session
-        st.session_state.pop("user")
-        st.experimental_rerun()
+    st.markdown(logout_button, unsafe_allow_html=True)
+    
 
     # Appointment Booking
     st.sidebar.subheader("Appointment Booking")
@@ -328,7 +328,53 @@ def main():
                 st.table(user_records)
             else:
                 st.info("No user records found.")
-                
+            # Add Users
+            st.subheader("Add Users")
+            new_user_name = st.text_input("Name")
+            new_user_email = st.text_input("Email")
+            new_user_password = st.text_input("Password", type="password")
+            is_admin = st.checkbox("Is Admin")
+
+            add_user = st.button("Add User")
+
+            if add_user:
+                if new_user_name and new_user_email and new_user_password:
+                    new_user = {
+                        "name": new_user_name,
+                        "email": new_user_email,
+                        "password": new_user_password,
+                        "is_admin": is_admin
+                    }
+                    users_collection.insert_one(new_user)
+                    st.success("User added successfully!")
+                else:
+                    st.error("Please fill in all the user details!")
+    if manage_users:
+            st.subheader("Manage Users")
+            all_users = users_collection.find({})
+            user_records = []
+            for user in all_users:
+                user_records.append({
+                    "User ID": user["_id"],
+                    "Name": user["name"],
+                    "Email": user["email"],
+                    "Is Admin": user["is_admin"],
+                    "Action": st.button(f"Remove##{user['_id']}")
+                })
+
+            if len(user_records) > 0:
+                df = pd.DataFrame(user_records)
+                df.set_index("User ID", inplace=True)
+                st.dataframe(df)
+            else:
+                st.info("No user records found.")
+
+            for user_record in user_records:
+                if user_record["Action"]:
+                    user_id = user_record.name
+                    users_collection.delete_one({"_id": user_id})
+                    st.success("User removed successfully!")            
+        
     
     
 # User login
