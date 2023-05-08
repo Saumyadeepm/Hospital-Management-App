@@ -57,7 +57,7 @@ def main():
         else:
             st.sidebar.error("Please fill in all the appointment details!")
    
-
+    st.sidebar.divider()
     # Patient Records
     st.sidebar.subheader("Patient Records")
     patient_name = st.sidebar.text_input("Patient Name")
@@ -81,7 +81,7 @@ def main():
         else:
             st.sidebar.error("Please fill in all the patient details!")
     
-
+    st.sidebar.divider()
     
     row_number = st.number_input('Number of rows', min_value=0, value=20)
     
@@ -128,7 +128,7 @@ def main():
             col2.info("No appointment records found.")
         
         
-   
+    st.sidebar.divider()
     # Doctor's Schedule
     if user["is_admin"]:
         st.sidebar.subheader("Doctor's Schedule")
@@ -149,7 +149,8 @@ def main():
                     st.sidebar.error("Doctor not found!")
             else:
                 st.sidebar.error("Please fill in all the doctor schedule details!")
-
+    
+    st.sidebar.divider()
     # Billing and Payments
     st.sidebar.subheader("Billing and Payments")
     view_invoices = st.sidebar.button("View Invoices")
@@ -227,7 +228,8 @@ def main():
                     st.error("Invoice not found.")
             else:
                 st.error("Please provide a valid invoice ID and payment amount.")
-
+    
+    st.sidebar.divider()
     # Reports and Analytics
     st.sidebar.subheader("Reports and Analytics")
     generate_report = st.sidebar.button("Generate Report")
@@ -254,7 +256,39 @@ def main():
                     report_data.append(patient)
                 reports_collection.insert_one({"report_type": "Patient", "data": report_data})
                 st.success("Patient report generated!")
+    st.divider()
+    # Divide the screen into two columns
+    col1, col2 = st.beta_columns(2)
+    with col1:
+        # Generate and display Appointment Report
+        if report_type == "Appointment":
+            st.subheader("Appointment Report")
+            report_data = []
+            appointment_cursor = appointments_collection.find({})
+            for appointment in appointment_cursor:
+                report_data.append(appointment)
+            if len(report_data) > 0:
+                col1.table(report_data)
+            else:
+                col1.info("No appointment records found.")
+            reports_collection.insert_one({"report_type": "Appointment", "data": report_data})
+            st.success("Appointment report generated!")
 
+    with col2:
+    # Generate and display Patient Report
+        if report_type == "Patient":
+            st.subheader("Patient Report")
+            report_data = []
+            patient_cursor = patients_collection.find({})
+            for patient in patient_cursor:
+                report_data.append(patient)
+            if len(report_data) > 0:
+                col2.table(report_data)
+            else:
+                col2.info("No patient records found.")
+            reports_collection.insert_one({"report_type": "Patient", "data": report_data})
+            st.success("Patient report generated!")
+    
     # User Management
     if user["is_admin"]:
         st.sidebar.subheader("User Management")
@@ -271,14 +305,7 @@ def main():
                 st.write("-------------------------")
 
     # Display Appointments
-    st.subheader("Appointments")
-    appointment_cursor = appointments_collection.find({"user_id": user["_id"]})
-    for appointment in appointment_cursor:
-        st.write(f"Appointment ID: {appointment['_id']}")
-        st.write(f"Doctor: {appointment['doctor_name']}")
-        st.write(f"Date: {appointment['date']}")
-        st.write(f"Time: {appointment['time']}")
-        st.write("-------------------------")
+    
 # User login
 def login():
     st.subheader("Login")
