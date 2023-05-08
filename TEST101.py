@@ -36,6 +36,23 @@ def main():
         st.stop()
 
     user = st.session_state["user"]
+    # Logout button
+    st.sidebar.markdown(
+        """
+        <div style='position: fixed; top: 10px; right: 10px;'>
+        <form method='POST'>
+        <input type='submit' value='Logout' name='logout_button'/>
+        </form>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    # Handle logout
+    if st.session_state.pop("logout_button", False):
+        st.session_state.pop("user")
+        st.success("Logout successful!")
+        st.stop()
 
     # Appointment Booking
     st.sidebar.subheader("Appointment Booking")
@@ -295,14 +312,21 @@ def main():
         if manage_users:
             st.subheader("Manage Users")
             all_users = users_collection.find({})
+            user_records = []
             for user in all_users:
-                st.write(f"User ID: {user['_id']}")
-                st.write(f"Name: {user['name']}")
-                st.write(f"Email: {user['email']}")
-                st.write(f"Is Admin: {user['is_admin']}")
-                st.write("-------------------------")
+                user_records.append({
+                    "User ID": user["_id"],
+                    "Name": user["name"],
+                    "Email": user["email"],
+                    "Is Admin": user["is_admin"]
+                })
 
-    # Display Appointments
+            if len(user_records) > 0:
+                st.table(user_records)
+            else:
+                st.info("No user records found.")
+                
+    
     
 # User login
 def login():
