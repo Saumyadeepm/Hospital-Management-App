@@ -263,7 +263,7 @@ def main():
         #Display Appointment Report
         st.subheader("Appointment Report")
         report_data = []
-        appointment_cursor = appointments_collection.find({}).limit(row_number)
+        appointment_cursor = appointments_collection.find({},{"_id":0}).limit(row_number)
         for appointment in appointment_cursor:
             report_data.append(appointment)
         if len(report_data) > 0:
@@ -277,7 +277,7 @@ def main():
     # Display Patient Report
         st.subheader("Patient Report")
         report_data = []
-        patient_cursor = patients_collection.find({}).limit(row_number)
+        patient_cursor = patients_collection.find({},{"_id":0}).limit(row_number)
         for patient in patient_cursor:
             report_data.append(patient)
         if len(report_data) > 0:
