@@ -37,11 +37,11 @@ def main():
 
     # Appointment Booking
     st.sidebar.subheader("Appointment Booking")
-    doctor_name = st.sidebar.text_input("Doctor's Name")
-    appointment_date = st.sidebar.date_input("Appointment Date")
-    appointment_time = st.sidebar.time_input("Appointment Time")
-    book_appointment = st.sidebar.button("Book Appointment")
-
+    doctor_name = st.sidebar.text_input("Doctor's Name", key="doctor_name")
+    appointment_date = st.sidebar.date_input("Appointment Date", key="appointment_date")
+    appointment_time = st.sidebar.time_input("Appointment Time", key="appointment_time")
+    book_appointment = st.sidebar.button("Book Appointment", key="book_appointment")
+    
     if book_appointment:
         if doctor_name and appointment_date and appointment_time:
             appointment = {
