@@ -46,9 +46,9 @@ def main():
         if doctor_name and appointment_date and appointment_time:
             appointment = {
                 "doctor_name": doctor_name,
-                "date": appointment_date,
-                "time": appointment_time,
-                "user_id": user["_id"]
+                "date": str(appointment_date),
+                "time": str(appointment_time),
+                "user_id": str(user["_id"])
             }
             appointments_collection.insert_one(appointment)
             st.sidebar.success("Appointment booked successfully!")
