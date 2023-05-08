@@ -375,7 +375,7 @@ def main():
                     user_id = user_record.name
                     users_collection.delete_one({"_id": user_id})
                     st.success("User removed successfully!") """             
-            st.divider()
+        st.divider()
         if Remove_users:
                 st.subheader("Remove Users")
                 all_users = users_collection.find({})
