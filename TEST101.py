@@ -349,39 +349,39 @@ def main():
                     st.success("User added successfully!")
                 else:
                     st.error("Please fill in all the user details!")
-            
             if len(user_records) > 0:
-                df = pd.DataFrame(user_records)
-                df.set_index("User ID", inplace=True)
+            df = pd.DataFrame(user_records)
+            df.set_index("User ID", inplace=True)
 
-                # Display the DataFrame with clickable rows
-                selected_user_ids = st.dataframe(df.style.set_table_attributes("data-testid='users_table'"), height=300)
+            # Display the DataFrame with clickable rows
+            selected_user_ids = st.dataframe(df.style.set_table_attributes("data-testid='users_table'"), height=300)
 
-                # Delete user when a row is clicked
-                if selected_user_ids is not None:
-                    selected_user_ids = selected_user_ids.index.tolist()
-                    users_collection.delete_many({"_id": {"$in": selected_user_ids}})
-                    st.success("Users removed successfully!")
+            # Delete user when a row is clicked
+            if selected_user_ids is not None:
+                selected_user_ids = selected_user_ids.index.tolist()
+                for user_id in selected_user_ids:
+                    users_collection.delete_one({"_id": user_id})
+                st.success("Users removed successfully!")
 
-                    # Refresh the user records after deletion
-                    all_users = users_collection.find({})
-                    updated_user_records = []
-                    for user in all_users:
-                        updated_user_records.append({
-                            "User ID": user["_id"],
-                            "Username": user["username"],
-                            "Email": user["email"],
-                            "Is Admin": user["is_admin"],
-                        })
+                # Refresh the user records after deletion
+                all_users = users_collection.find({})
+                updated_user_records = []
+                for user in all_users:
+                    updated_user_records.append({
+                        "User ID": user["_id"],
+                        "Username": user["username"],
+                        "Email": user["email"],
+                        "Is Admin": user["is_admin"],
+                    })
 
-                    if len(updated_user_records) > 0:
-                        updated_df = pd.DataFrame(updated_user_records)
-                        updated_df.set_index("User ID", inplace=True)
-                        st.dataframe(updated_df)
-                    else:
-                        st.info("No user records found.")
-            else:
-                st.info("No user records found.")
+                if len(updated_user_records) > 0:
+                    updated_df = pd.DataFrame(updated_user_records)
+                    updated_df.set_index("User ID", inplace=True)
+                    st.dataframe(updated_df)
+                else:
+                    st.info("No user records found.")
+        else:
+            st.info("No user records found.")
     """
     if manage_users:
             st.subheader("Manage Users")
