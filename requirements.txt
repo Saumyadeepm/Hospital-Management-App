@@ -1,4 +1,3 @@
 streamlit
 pymongo
 streamlit-authenticator
-streamli_authenticator
