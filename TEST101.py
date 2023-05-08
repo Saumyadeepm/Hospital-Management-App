@@ -114,12 +114,12 @@ def main():
         max_height=300
     )
 
-# Display Patient Records
-st.subheader("Patient Records")
-if data:
-    st.table(data)
-else:
-    st.info("No patient records found.")
+    # Display Patient Records
+    st.subheader("Patient Records")
+    if data:
+        st.table(data)
+    else:
+        st.info("No patient records found.")
     
     # Doctor's Schedule
     if user["is_admin"]:
