@@ -37,15 +37,25 @@ def main():
 
     user = st.session_state["user"]
     
-    # Divide the screen into two columns
-    col1, col2 = st.beta_columns([1, 4])
+     # Add CSS styling to position the logout button in the top right corner
+    st.markdown(
+        """
+        <style>
+        .logout-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    # Logout button in top right corner
-    if col2.button("Logout", key="logout_button"):
+    # Logout button
+    if st.button("Logout", key="logout", class_="logout-button"):
+        # Clear user session
         st.session_state.pop("user")
-        st.success("Logout successful!")
-        st.stop()
-    
+        st.experimental_rerun()
 
     # Appointment Booking
     st.sidebar.subheader("Appointment Booking")
