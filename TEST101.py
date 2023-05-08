@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from pymongo.mongo_client import MongoClient
 from src.agstyler import PINLEFT, PRECISION_TWO, draw_grid
 
@@ -86,20 +87,20 @@ def main():
     'medical_history': ('Medical History', {'width': 200})
     }
 
-    row_number = st.number_input('Number of rows', min_value=0, value=20)
-    data = draw_grid(
-        patients_collection.find({"user_id": user["_id"]}).limit(row_number),
-        formatter=formatter,
-        fit_columns=True,
-        selection=None,
-        use_checkbox=False,
-        max_height=300
-    )
-
     # Display Patient Records
     st.subheader("Patient Records")
-    if data:
-        st.table(data)
+    patient_cursor = patients_collection.find({"user_id": user["_id"]})
+    patient_records = []
+    for patient in patient_cursor:
+        patient_records.append({
+            "Patient Name": patient["name"],
+            "Age": patient["age"],
+            "Gender": patient["gender"],
+            "Medical History": patient["medical_history"]
+        })
+
+    if len(patient_records) > 0:
+        st.table(patient_records)
     else:
         st.info("No patient records found.")
     
