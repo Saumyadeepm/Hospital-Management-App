@@ -36,14 +36,20 @@ def main():
         st.stop()
 
     user = st.session_state["user"]
+    
+    logout_button_style = """
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    """
+    
     # Logout button
-    logout_button = st.sidebar.empty()
-    logout_button.button("Logout")
+    st.sidebar.markdown(f'<button style="{logout_button_style}" onclick="location.reload();">Logout</button>', unsafe_allow_html=True)
 
     # Handle logout
-    if logout_button.clicked:
+    if st.sidebar.button("Logout"):
         st.session_state.pop("user")
-        st.success("Logout successful!")
+        st.sidebar.success("Logout successful!")
         st.stop()
 
     # Appointment Booking
