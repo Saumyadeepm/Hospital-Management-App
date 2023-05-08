@@ -319,7 +319,7 @@ def main():
             for user in all_users:
                 user_records.append({
                     "User ID": user["_id"],
-                    "Name": user["name"],
+                    "Username": user["username"],
                     "Email": user["email"],
                     "Is Admin": user["is_admin"]
                 })
@@ -330,7 +330,7 @@ def main():
                 st.info("No user records found.")
             # Add Users
             st.subheader("Add Users")
-            new_user_name = st.text_input("Name")
+            new_user_name = st.text_input("Username")
             new_user_email = st.text_input("Email")
             new_user_password = st.text_input("Password", type="password")
             is_admin = st.checkbox("Is Admin")
@@ -340,7 +340,7 @@ def main():
             if add_user:
                 if new_user_name and new_user_email and new_user_password:
                     new_user = {
-                        "name": new_user_name,
+                        "username": new_user_name,
                         "email": new_user_email,
                         "password": new_user_password,
                         "is_admin": is_admin
