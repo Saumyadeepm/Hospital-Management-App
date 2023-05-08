@@ -349,6 +349,7 @@ def main():
                     st.success("User added successfully!")
                 else:
                     st.error("Please fill in all the user details!")
+    """
     if manage_users:
             st.subheader("Manage Users")
             all_users = users_collection.find({})
@@ -373,7 +374,7 @@ def main():
                 if user_record["Action"]:
                     user_id = user_record.name
                     users_collection.delete_one({"_id": user_id})
-                    st.success("User removed successfully!")              
+                    st.success("User removed successfully!") """             
         st.divider()
         if Remove_users:
                 st.subheader("Remove Users")
