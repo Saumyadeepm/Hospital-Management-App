@@ -82,29 +82,52 @@ def main():
             st.sidebar.error("Please fill in all the patient details!")
     
 
-    # Display Patient Records
-    st.subheader("Patient Records")
+    
     row_number = st.number_input('Number of rows', min_value=0, value=20)
     
-    # Divide the screen into two columns
-    col1, col2 = st.beta_columns(2)
+    
 
     # Retrieve patient records from MongoDB and convert Cursor to DataFrame
     patient_cursor = patients_collection.find({"user_id": user["_id"]}).limit(row_number)
    
-    patient_records = []
-    for patient in patient_cursor:
-        patient_records.append({
-            "Patient Name": patient["name"],
-            "Age": patient["age"],
-            "Gender": patient["gender"],
-            "Medical History": patient["medical_history"]
-        })
-
-    if len(patient_records) > 0:
-        col1.table(patient_records)
-    else:
-        col1.info("No patient records found.")
+    # Retrieve appointments data from MongoDB and convert Cursor to DataFrame
+    appointment_cursor = appointments_collection.find({"user_id": user["_id"]}).limit(row_number)
+    
+    # Divide the screen into two columns
+    col1, col2 = st.beta_columns(2)
+    
+    with col1:
+        # Display Patient Records
+        st.subheader("Patient Records")
+        patient_records = []
+        for patient in patient_cursor:
+            patient_records.append({
+                "Patient Name": patient["name"],
+                "Age": patient["age"],
+                "Gender": patient["gender"],
+                "Medical History": patient["medical_history"]
+            })
+        if len(patient_records) > 0:
+            col1.table(patient_records)
+        else:
+            col1.info("No patient records found.")
+            
+    with col2:
+        # Display Appointments Records
+        st.subheader("Appointments")
+        appointment_records = []
+        for appointment in appointment_cursor:
+            appointment_records.append({
+                "Doctor Name": patient["doctor_name"],
+                "Appointment Date": patient["date"],
+                "Appointment Time": patient["time"]
+            })
+        if len(appointment_records) > 0:
+            col2.table(appointment_records)
+        else:
+            col2.info("No appointment records found.")
+        
+        
    
     # Doctor's Schedule
     if user["is_admin"]:
