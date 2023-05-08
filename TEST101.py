@@ -1,5 +1,6 @@
 import streamlit as st
 from pymongo.mongo_client import MongoClient
+from src.agstyler import PINLEFT, PRECISION_TWO, draw_grid
 
 uri = "mongodb+srv://saumya:helloworld@mycluster101.keorneq.mongodb.net/?retryWrites=true&w=majority"
 
@@ -54,22 +55,7 @@ def main():
             st.sidebar.success("Appointment booked successfully!")
         else:
             st.sidebar.error("Please fill in all the appointment details!")
-    # Display Patient Records
-    st.subheader("Patient Records")
-    patient_cursor = patients_collection.find({"user_id": user["_id"]})
-    patient_records = []
-    for patient in patient_cursor:
-        patient_records.append({
-            "Patient Name": patient["name"],
-            "Age": patient["age"],
-            "Gender": patient["gender"],
-            "Medical History": patient["medical_history"]
-        })
-
-    if len(patient_records) > 0:
-        st.table(patient_records)
-    else:
-        st.info("No patient records found.")
+   
 
     # Patient Records
     st.sidebar.subheader("Patient Records")
@@ -93,6 +79,29 @@ def main():
             st.sidebar.success("Patient added successfully!")
         else:
             st.sidebar.error("Please fill in all the patient details!")
+    formatter = {
+    'name': ('Patient Name', PINLEFT),
+    'age': ('Age', {'width': 80}),
+    'gender': ('Gender', {'width': 100}),
+    'medical_history': ('Medical History', {'width': 200})
+    }
+
+    row_number = st.number_input('Number of rows', min_value=0, value=20)
+    data = draw_grid(
+        patients_collection.find({"user_id": user["_id"]}).limit(row_number),
+        formatter=formatter,
+        fit_columns=True,
+        selection=None,
+        use_checkbox=False,
+        max_height=300
+    )
+
+    # Display Patient Records
+    st.subheader("Patient Records")
+    if data:
+        st.table(data)
+    else:
+        st.info("No patient records found.")
     
     # Doctor's Schedule
     if user["is_admin"]:
