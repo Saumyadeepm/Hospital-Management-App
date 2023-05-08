@@ -80,47 +80,32 @@ def main():
             st.sidebar.success("Patient added successfully!")
         else:
             st.sidebar.error("Please fill in all the patient details!")
-    formatter = {
-    'name': ('Patient Name', PINLEFT),
-    'age': ('Age', {'width': 80}),
-    'gender': ('Gender', {'width': 100}),
-    'medical_history': ('Medical History', {'width': 200})
-    }
-
-
-    row_number = st.number_input('Number of rows', min_value=0, value=20)
-
-    # Retrieve patient records from MongoDB and convert Cursor to DataFrame
-    patient_cursor = patients_collection.find({"user_id": user["_id"]}).limit(row_number)
-    patient_data = list(patient_cursor)
-    # Decode string values in patient_data using 'latin1' codec
-    decoded_patient_data = []
-    for data in patient_data:
-        decoded_data = {
-            key: value.decode('latin1') if isinstance(value, bytes) else value
-            for key, value in data.items()
-        }
-        decoded_patient_data.append(decoded_data)
-
-    patient_df = pd.DataFrame(decoded_patient_data)
-
-    # Draw grid table using the converted DataFrame
-    data = draw_grid(
-        patient_df,
-        formatter=formatter,
-        fit_columns=True,
-        selection=None,
-        use_checkbox=False,
-        max_height=300
-    )
+    
 
     # Display Patient Records
     st.subheader("Patient Records")
-    if data:
-        st.table(data)
-    else:
-        st.info("No patient records found.")
+    row_number = st.number_input('Number of rows', min_value=0, value=20)
     
+    # Divide the screen into two columns
+    col1, col2 = st.beta_columns(2)
+
+    # Retrieve patient records from MongoDB and convert Cursor to DataFrame
+    patient_cursor = patients_collection.find({"user_id": user["_id"]}).limit(row_number)
+   
+    patient_records = []
+    for patient in patient_cursor:
+        patient_records.append({
+            "Patient Name": patient["name"],
+            "Age": patient["age"],
+            "Gender": patient["gender"],
+            "Medical History": patient["medical_history"]
+        })
+
+    if len(patient_records) > 0:
+        col1.table(patient_records)
+    else:
+        col1.info("No patient records found.")
+   
     # Doctor's Schedule
     if user["is_admin"]:
         st.sidebar.subheader("Doctor's Schedule")
