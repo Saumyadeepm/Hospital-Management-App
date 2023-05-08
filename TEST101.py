@@ -2,7 +2,7 @@ import streamlit as st
 from pymongo import MongoClient
 
 # Connect to MongoDB
-client = MongoClient("mongodb+srv://myAtlasDBUser:iamtheking@myatlasclusteredu.qhnlyuz.mongodb.net/?retryWrites=true&w=majority")
+client = MongoClient("mongodb+srv://saumya:helloworld@mycluster101.keorneq.mongodb.net/?retryWrites=true&w=majority")
 
 db = client["hospital_management"]
 appointments_collection = db["appointments"]
