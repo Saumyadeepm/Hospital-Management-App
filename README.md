@@ -4,10 +4,10 @@ This is a Hospital Management App implemented using Streamlit and MongoDB. The a
 ## Prerequisites
 Before running the application, make sure you have the following prerequisites installed:
 
-Python 3.x
-Streamlit
-pandas
-pymongo
+- Python 3.x
+- Streamlit
+- pandas
+- pymongo
 
 ## Installation
 1. Clone the repository:
