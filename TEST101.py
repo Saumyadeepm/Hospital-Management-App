@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from pymongo.mongo_client import MongoClient
 from src.agstyler import PINLEFT, PRECISION_TWO, draw_grid
+from PIL import Image
 
 uri = "mongodb+srv://saumya:helloworld@mycluster101.keorneq.mongodb.net/?retryWrites=true&w=majority"
 
@@ -16,9 +17,9 @@ invoices_collection = db["invoices"]
 reports_collection = db["reports"]
 users_collection = db["users"]
 
-
+im = Image.open("Icon/hospital.png")
 # Create Streamlit app and define layout
-st.set_page_config(page_title="Hospital Management App", layout="wide")
+st.set_page_config(page_title="Hospital Management App",page_icon=im,  layout="wide")
 
 # User authentication
 def authenticate(username, password):
