@@ -58,4 +58,4 @@ Contributions to the Hospital Management App are welcome. If you find any issues
 This project is licensed under the MIT License.
 
 Contact
-If you have any questions or suggestions, please feel free to contact me at [saumyadeepmitra.12@gmail.com].
+If you have any questions or suggestions, please feel free to contact me at [saumyadeepmitra.12@gmail.com]. 😊
