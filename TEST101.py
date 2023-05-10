@@ -380,12 +380,11 @@ def main():
                         st.success("Users removed successfully!")
                     else:
                         st.info("No users selected.")
-                # Get the updated dataframe
-                updated_df = edited_df.drop(columns=["Remove"])
+               
                 # Display the updated dataframe
                 st.subheader("Updated User Records")
-                if not updated_df.empty:
-                    st.table(updated_df)
+                if not edited_df.empty:
+                    st.table(edited_df)
                 else:
                     st.info("No user records found.")
                 
