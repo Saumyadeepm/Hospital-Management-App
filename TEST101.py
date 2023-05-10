@@ -380,6 +380,9 @@ def main():
                         st.success("Users removed successfully!")
                     else:
                         st.info("No users selected.")
+                # Get the updated dataframe
+                updated_df = edited_df.drop(columns=["Remove"])
+
             else:
                 st.info("No user records found.")
                     
