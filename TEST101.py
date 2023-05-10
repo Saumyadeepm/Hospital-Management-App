@@ -139,9 +139,9 @@ def main():
         appointment_records = []
         for appointment in appointment_cursor:
             appointment_records.append({
-                "Doctor Name": patient["doctor_name"],
-                "Appointment Date": patient["date"],
-                "Appointment Time": patient["time"]
+                "Doctor Name": appointment["doctor_name"],
+                "Appointment Date": appointment["date"],
+                "Appointment Time": appointment["time"]
             })
         if len(appointment_records) > 0:
             col2.table(appointment_records)
