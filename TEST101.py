@@ -352,7 +352,7 @@ def main():
                     st.error("Please fill in all the user details!")
                     
     
-    
+        if manage_users:
             st.subheader("Remove Users")
             all_users = users_collection.find({})
             user_records = []
