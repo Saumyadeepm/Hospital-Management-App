@@ -322,8 +322,7 @@ def main():
                     "User ID": user["_id"],
                     "Username": user["username"],
                     "Email": user["email"],
-                    "Is Admin": user["is_admin"],
-                    "Action": st.form_submit_button(f"Remove##{user['username']}")
+                    "Is Admin": user["is_admin"])
                 })
 
             if len(user_records) > 0:
@@ -332,27 +331,26 @@ def main():
                 st.info("No user records found.")
             
             # Add Users
-            with st.form("add_user_form"):
-                st.subheader("Add Users")
-                new_user_name = st.text_input("Username")
-                new_user_email = st.text_input("Email")
-                new_user_password = st.text_input("Password", type="password")
-                is_admin = st.checkbox("Is Admin")
+            st.subheader("Add Users")
+            new_user_name = st.text_input("Username")
+            new_user_email = st.text_input("Email")
+            new_user_password = st.text_input("Password", type="password")
+            is_admin = st.checkbox("Is Admin")
 
-                add_user = st.form_submit_button("Add User")
+            add_user = st.button("Add User")
 
-                if add_user:
-                    if new_user_name and new_user_email and new_user_password:
-                        new_user = {
-                            "username": new_user_name,
-                            "email": new_user_email,
-                            "password": new_user_password,
-                            "is_admin": is_admin
-                        }
-                        users_collection.insert_one(new_user)
-                        st.success("User added successfully!")
-                    else:
-                        st.error("Please fill in all the user details!")
+            if add_user:
+                if new_user_name and new_user_email and new_user_password:
+                    new_user = {
+                        "username": new_user_name,
+                        "email": new_user_email,
+                        "password": new_user_password,
+                        "is_admin": is_admin
+                    }
+                    users_collection.insert_one(new_user)
+                    st.success("User added successfully!")
+                else:
+                    st.error("Please fill in all the user details!")
 
 
 """
