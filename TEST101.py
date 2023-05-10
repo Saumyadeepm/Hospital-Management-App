@@ -382,8 +382,8 @@ def main():
                         for user_id in selected_users["User ID"]:
                             users_collection.delete_one({"_id": user_id})
                         st.success("Users removed successfully!")
-                        else:
-                            st.info("No users selected.")
+                    else:
+                        st.info("No users selected.")
                 else:
                     st.info("No user records found.")
                     
