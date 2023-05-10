@@ -377,6 +377,7 @@ def main():
         manage_users = st.sidebar.button("Manage Users")
 
         if manage_users:
+            manage_users_page(users_collection)
                        
         
             
