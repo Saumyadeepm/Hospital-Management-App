@@ -27,11 +27,6 @@ def authenticate(username, password):
     if user and user["password"] == password:
         return user
     return None
-# function to handle the removal of users 
-def write_func(new_df):
-    new_df = new_df[new_df["Remove"] == False]  # Filter out the rows marked for removal
-    new_df.drop("Remove", axis=1, inplace=True)  # Remove the "Remove" column
-    return new_df
 
 # Main function
 def main():
@@ -373,19 +368,20 @@ def main():
             if len(user_records) > 0:
                 df = pd.DataFrame(user_records)
                 df["Remove"] = False
-                edited_df = st.experimental_data_editor(df, num_rows="dynamic", write_func=write_func, remove_row=True)
-                remove_buttons = st.button("Remove Selected Users")
+                edited_df = st.experimental_data_editor(df, num_rows="dynamic")
                 
-                if remove_buttons:
+                if st.button("Remove Selected Users"):
                     selected_users = edited_df[edited_df["Remove"] == True]
+
                     if not selected_users.empty:
-                        for user_id in selected_users["User ID"]:
+                        for index, row in selected_users.iterrows():
+                            user_id = row["User ID"]
                             users_collection.delete_one({"_id": user_id})
                         st.success("Users removed successfully!")
                     else:
                         st.info("No users selected.")
-                else:
-                    st.info("No user records found.")
+            else:
+                st.info("No user records found.")
                     
 
         
