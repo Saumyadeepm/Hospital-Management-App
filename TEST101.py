@@ -27,70 +27,7 @@ def authenticate(username, password):
     if user and user["password"] == password:
         return user
     return None
-def manage_users_page(users_collection):
-    st.subheader("Manage Users")
-    all_users = users_collection.find({})
-    user_records = []
-    for user in all_users:
-        user_records.append({
-            "User ID": user["_id"],
-            "Username": user["username"],
-            "Email": user["email"],
-            "Is Admin": user["is_admin"]
-        })
 
-    if len(user_records) > 0:
-        st.table(user_records)
-    else:
-        st.info("No user records found.")
-    # Add Users
-    st.subheader("Add Users")
-    new_user_name = st.text_input("Username")
-    new_user_email = st.text_input("Email")
-    new_user_password = st.text_input("Password", type="password")
-    is_admin = st.checkbox("Is Admin")
-
-    add_user = st.button("Add User")
-
-    if add_user:
-        if new_user_name and new_user_email and new_user_password:
-            new_user = {
-                "username": new_user_name,
-                "email": new_user_email,
-                "password": new_user_password,
-                "is_admin": is_admin
-            }
-            users_collection.insert_one(new_user)
-            st.success("User added successfully!")
-        else:
-            st.error("Please fill in all the user details!")
-
-
-
-    st.subheader("Remove Users")
-    all_users = users_collection.find({})
-    user_records = []
-    for user in all_users:
-        user_records.append({
-            "User ID": user["_id"],
-            "Username": user["username"],
-            "Email": user["email"],
-            "Is Admin": user["is_admin"],
-            "Action": st.button(f"Remove##{user['username']}")
-        })
-
-    if len(user_records) > 0:
-        df = pd.DataFrame(user_records)
-        df.set_index("User ID", inplace=True)
-        st.dataframe(df)
-    else:
-        st.info("No user records found.")
-
-    for user_record in user_records:
-        if user_record["Action"]:
-            user_id = user_record.name
-            users_collection.delete_one({"_id": user_id})
-            st.success("User removed successfully!")
 # Main function
 def main():
     # Authentication
@@ -376,9 +313,72 @@ def main():
         st.sidebar.subheader("User Management")
         manage_users = st.sidebar.button("Manage Users")
 
-        if manage_users:
-            manage_users_page(users_collection)
-                       
+        if manage_users:        
+            st.subheader("Manage Users")
+            all_users = users_collection.find({})
+            user_records = []
+            for user in all_users:
+                user_records.append({
+                    "User ID": user["_id"],
+                    "Username": user["username"],
+                    "Email": user["email"],
+                    "Is Admin": user["is_admin"]
+                })
+
+            if len(user_records) > 0:
+                st.table(user_records)
+            else:
+                st.info("No user records found.")
+            # Add Users
+            st.subheader("Add Users")
+            new_user_name = st.text_input("Username")
+            new_user_email = st.text_input("Email")
+            new_user_password = st.text_input("Password", type="password")
+            is_admin = st.checkbox("Is Admin")
+
+            add_user = st.button("Add User")
+
+            if add_user:
+                if new_user_name and new_user_email and new_user_password:
+                    new_user = {
+                        "username": new_user_name,
+                        "email": new_user_email,
+                        "password": new_user_password,
+                        "is_admin": is_admin
+                    }
+                    users_collection.insert_one(new_user)
+                    st.success("User added successfully!")
+                else:
+                    st.error("Please fill in all the user details!")
+
+
+"""
+            st.subheader("Remove Users")
+            all_users = users_collection.find({})
+            user_records = []
+            for user in all_users:
+                user_records.append({
+                    "User ID": user["_id"],
+                    "Username": user["username"],
+                    "Email": user["email"],
+                    "Is Admin": user["is_admin"],
+                    "Action": st.button(f"Remove##{user['username']}")
+                })
+
+            if len(user_records) > 0:
+                df = pd.DataFrame(user_records)
+                df.set_index("User ID", inplace=True)
+                st.dataframe(df)
+            else:
+                st.info("No user records found.")
+
+            for user_record in user_records:
+                if user_record["Action"]:
+                    user_id = user_record.name
+                    users_collection.delete_one({"_id": user_id})
+                    st.success("User removed successfully!")
+                    """
+
         
             
 # User login
