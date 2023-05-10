@@ -351,44 +351,9 @@ def main():
                 else:
                     st.error("Please fill in all the user details!")
                     
-            if len(user_records) > 0:
-                df = pd.DataFrame(user_records)
-                df.set_index("User ID", inplace=True)
-
-                # Display the DataFrame as a table
-                st.table(df)
-
-                # Get the selected user ID for deletion
-                selected_user_id = st.checkbox("Select user for deletion")
-
-                # Delete user when the checkbox is selected
-                if selected_user_id:
-                    if st.button("Delete Selected User"):
-                        users_collection.delete_one({"_id": selected_user_id})
-                        st.success("User removed successfully!")
-
-                        # Refresh the user records after deletion
-                        all_users = users_collection.find({})
-                        updated_user_records = []
-                        for user in all_users:
-                            updated_user_records.append({
-                                "User ID": user["_id"],
-                                "Username": user["username"],
-                                "Email": user["email"],
-                                "Is Admin": user["is_admin"],
-                            })
-
-                        if len(updated_user_records) > 0:
-                            updated_df = pd.DataFrame(updated_user_records)
-                            updated_df.set_index("User ID", inplace=True)
-                            st.table(updated_df)
-                        else:
-                            st.info("No user records found.")
-            else:
-                st.info("No user records found.")
-    """
+    
     if manage_users:
-            st.subheader("Manage Users")
+            st.subheader("Remove Users")
             all_users = users_collection.find({})
             user_records = []
             for user in all_users:
@@ -411,7 +376,7 @@ def main():
                 if user_record["Action"]:
                     user_id = user_record.name
                     users_collection.delete_one({"_id": user_id})
-                    st.success("User removed successfully!") """             
+                    st.success("User removed successfully!")           
         
             
 # User login
