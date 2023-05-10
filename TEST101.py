@@ -192,7 +192,7 @@ def main():
     doctor_cursor = doctors_collection.find({"user_id": user["_id"]}).limit(row_number)
    
     # Retrieve appointments data from MongoDB and convert Cursor to DataFrame
-    invoice_cursor = invoices_collection.find({"user_id": user["_id"]}).limit(row_number)
+    invoice_cursor = invoices_collection.find({}).limit(row_number)
     
     # Divide the screen into two columns
     col1, col2 = st.beta_columns(2)
