@@ -322,7 +322,7 @@ def main():
                     "User ID": user["_id"],
                     "Username": user["username"],
                     "Email": user["email"],
-                    "Is Admin": user["is_admin"])
+                    "Is Admin": user["is_admin"]
                 })
 
             if len(user_records) > 0:
