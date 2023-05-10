@@ -311,7 +311,7 @@ def main():
     # User Management
     if user["is_admin"]:
         st.sidebar.subheader("User Management")
-        manage_users = st.sidebar.button("Manage Users")
+        manage_users = st.sidebar.checkbox("Manage Users")
 
         if manage_users:        
             st.subheader("Manage Users")
@@ -353,7 +353,7 @@ def main():
                     st.error("Please fill in all the user details!")
 
 
-"""
+
             st.subheader("Remove Users")
             all_users = users_collection.find({})
             user_records = []
@@ -378,7 +378,7 @@ def main():
                     user_id = user_record.name
                     users_collection.delete_one({"_id": user_id})
                     st.success("User removed successfully!")
-                    """
+                    
 
         
             
