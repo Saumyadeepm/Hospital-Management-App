@@ -323,7 +323,7 @@ def main():
                     "Username": user["username"],
                     "Email": user["email"],
                     "Is Admin": user["is_admin"],
-                    "Action": st.form_submit_button(f"Remove##{user['username']}"
+                    "Action": st.form_submit_button(f"Remove##{user['username']}")
                 })
 
             if len(user_records) > 0:
