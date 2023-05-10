@@ -363,21 +363,24 @@ def main():
                     "Username": user["username"],
                     "Email": user["email"],
                     "Is Admin": user["is_admin"],
-                    "Action": st.button(f"Remove##{user['username']}")
+                    "Action": user["username"]
                 })
 
             if len(user_records) > 0:
                 df = pd.DataFrame(user_records)
                 df.set_index("User ID", inplace=True)
                 st.dataframe(df)
+                remove_buttons = st.button("Remove Selected Users")
+                if remove_buttons:
+                    selected_users = df[df["Action"] == True]
+                    if not selected_users.empty:
+                        for user_id in selected_users.index:
+                            users_collection.delete_one({"_id": user_id})
+                        st.success("Users removed successfully!")
+                    else:
+                        st.info("No users selected.")
             else:
                 st.info("No user records found.")
-
-            for user_record in user_records:
-                if user_record["Action"]:
-                    user_id = user_record.name
-                    users_collection.delete_one({"_id": user_id})
-                    st.success("User removed successfully!")
                     
 
         
