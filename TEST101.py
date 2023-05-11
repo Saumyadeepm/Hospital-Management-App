@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from pymongo.mongo_client import MongoClient
-from src.agstyler import PINLEFT, PRECISION_TWO, draw_grid
 from PIL import Image
 
 uri = "mongodb+srv://saumya:helloworld@mycluster101.keorneq.mongodb.net/?retryWrites=true&w=majority"
@@ -381,13 +380,13 @@ def main():
                     else:
                         st.info("No users selected.")
                
-                # Display the updated dataframe
-                edited_df = edited_df.drop(columns=["Remove"])
-                st.subheader("Updated User Records")
-                if not edited_df.empty:
-                    st.table(edited_df)
-                else:
-                    st.info("No user records found.")
+                    # Display the updated dataframe
+                    edited_df = edited_df.drop(columns=["Remove"])
+                    st.subheader("Updated User Records")
+                    if not edited_df.empty:
+                        st.table(edited_df)
+                    else:
+                        st.info("No user records found.")
                 
 
             else:
