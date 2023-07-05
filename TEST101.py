@@ -114,7 +114,7 @@ def main():
     appointment_cursor = appointments_collection.find({"user_id": user["_id"]}).limit(row_number)
     
     # Divide the screen into two columns
-    col1, col2 = st.beta_columns(2)
+    col1, col2 = st.columns(2)
     
     with col1:
         # Display Patient Records
